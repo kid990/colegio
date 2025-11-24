@@ -1,3 +1,21 @@
+@php
+
+    $navLinks = [
+        [
+            'name' => 'Dashboard',
+            'route' => 'dashboard',
+            'active' => 'dashboard',
+        ],
+        [
+            'name' => 'Configuración',
+            'route' => 'configuracion.index',
+            'active' => 'configuracion.*',
+        ],
+
+
+    ];
+@endphp
+
 <div x-data="{ open: false }" class="contents lg:block">
 
     {{-- SIDEBAR ESCRITORIO (solo lg y arriba) --}}
@@ -16,35 +34,14 @@
         {{-- 2) MENÚ (SOLO AQUÍ HAY SCROLL) --}}
         <div class="flex-1 px-4 py-4 space-y-2 overflow-y-auto">
 
-            <x-nav-link :href="route('dashboard')"
-                        :active="request()->routeIs('dashboard')"
-                        class="flex items-center w-full px-4 py-2 rounded-md">
-                {{ __('Dashboard') }}
-            </x-nav-link>
-
-            <x-nav-link :href="route('configuracion.index')"
-                        :active="request()->routeIs('configuracion.*')"
-                        class="flex items-center w-full px-4 py-2 rounded-md">
-                {{ __('Configuración') }}
-            </x-nav-link>
-
-            <x-nav-link :href="route('configuracion.index')"
-                        :active="request()->routeIs('configuracion.*')"
-                        class="flex items-center w-full px-4 py-2 rounded-md">
-                {{ __('Configuración') }}
-            </x-nav-link>
-            <x-nav-link :href="route('configuracion.index')"
-                        :active="request()->routeIs('configuracion.*')"
-                        class="flex items-center w-full px-4 py-2 rounded-md">
-                {{ __('Configuración') }}
-            </x-nav-link>
-            <x-nav-link :href="route('configuracion.index')"
-                        :active="request()->routeIs('configuracion.*')"
-                        class="flex items-center w-full px-4 py-2 rounded-md">
-                {{ __('Configuración') }}
-            </x-nav-link>
-
-
+            {{-- BUCLE PARA GENERAR ENLACES DE ESCRITORIO --}}
+            @foreach($navLinks as $link)
+                <x-nav-link :href="route($link['route'])"
+                            :active="request()->routeIs($link['active'])"
+                            class="flex items-center w-full px-4 py-2 rounded-md">
+                    {{ __($link['name']) }}
+                </x-nav-link>
+            @endforeach
 
         </div>
 
@@ -153,15 +150,15 @@
 
             {{-- Links móviles --}}
             <div class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-                <x-responsive-nav-link :href="route('dashboard')"
-                                       :active="request()->routeIs('dashboard')">
-                    {{ __('Dashboard') }}
-                </x-responsive-nav-link>
 
-                <x-responsive-nav-link :href="route('configuracion.index')"
-                                       :active="request()->routeIs('configuracion.*')">
-                    {{ __('Configuración') }}
-                </x-responsive-nav-link>
+                {{-- BUCLE PARA GENERAR ENLACES MÓVILES --}}
+                @foreach($navLinks as $link)
+                    <x-responsive-nav-link :href="route($link['route'])"
+                                           :active="request()->routeIs($link['active'])">
+                        {{ __($link['name']) }}
+                    </x-responsive-nav-link>
+                @endforeach
+
             </div>
 
             {{-- Perfil móvil --}}

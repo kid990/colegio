@@ -20,6 +20,7 @@ Route::middleware('auth')->group(function () {
 
 Route::prefix('dashboard')->middleware(['auth', 'verified'])->group(function () {
  Route::resource('/configuracion', ConfiguracionController::class);
+ Route::post('/config', [ConfiguracionController::class, 'store'])->name('config.store');
 });
 
 require __DIR__.'/auth.php';

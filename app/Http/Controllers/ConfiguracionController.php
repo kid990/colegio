@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Configuracion;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use function Pest\Laravel\json;
 
 class ConfiguracionController extends Controller
 {
@@ -13,8 +15,12 @@ class ConfiguracionController extends Controller
     public function index()
     {
         //
+        $jsonData = file_get_contents('https://api.hilariweb.com/divisas');
+        $divisas = json_decode($jsonData, true);
 
-        return view('admin.configuracion.index');
+        $configuracion = Configuracion::first();
+
+        return view('admin.configuracion.index', compact('configuracion', 'divisas'));
     }
 
     /**
@@ -31,6 +37,61 @@ class ConfiguracionController extends Controller
     public function store(Request $request)
     {
         //
+        $configuracion = Configuracion::first();
+
+        $rules = [
+            'nombre' => 'required',
+            'direccion' => 'required',
+            'descripcion' => 'required',
+            'telefono' => 'required',
+            'divisa' => 'required',
+            'correo_electronico' => 'required|email',
+            'web' => '',
+            'logo' => 'nullable|mimes:jpeg,png,jpg,svg|max:10048',
+        ];
+
+        // Si no existe configuración previa, el logo es obligatorio
+        if (!$configuracion) {
+            $rules['logo'] = 'required|mimes:jpeg,png,jpg,svg|max:10048';
+        }
+        $request->validate($rules);
+        // Preparar datos para guardar
+
+        // Método 1: Toma TODO del request
+        // $data = $request->all();
+
+        // Método 2: Toma TODO excepto el logo (luego lo agregamos manualmente)
+        $data = $request->except('logo');
+
+        // Método 3: Toma solo los campos específicos
+        // $data = $request->only(['nombre', 'direccion', 'descripcion', 'telefono', 'divisa', 'correo_electronico', 'web']);
+
+        // Manejo del logo
+        if ($request->hasFile('logo')) {
+            $nuevoLogo = $request->file('logo')->store('logo', 'public');
+
+            // DESPUÉS: Borrar logo anterior si existe
+            if ($configuracion && $configuracion->logo) {
+                Storage::disk('public')->delete($configuracion->logo);
+            }
+            $data['logo'] = $nuevoLogo;
+
+        } else {
+            if ($configuracion) {
+                $data['logo'] = $configuracion->logo;
+
+            }
+
+        }
+        if($configuracion){
+            $configuracion->update($data);
+            return redirect()->back()->with('success', 'Configuración actualizado exitosamente');
+        }else{
+            Configuracion::create($data);
+            return redirect()->back()->with('success', 'Configuración guardada exitosamente');
+        };
+
+
     }
 
     /**
