@@ -9,3 +9,9 @@ correo_electronico varchar
 web varchar
 logo varchar
 }
+
+Tabla gestiones{
+
+id int [pk,increment] // primary key
+nombre varchar
+}

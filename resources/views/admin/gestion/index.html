@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Document</title>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+</head>
+<body>
+
+<div x-data="{ open: false }">
+    <button @click="open = ! open">Toggle Content</button>
+
+    <div x-show="open">
+        Content...
+    </div>
+</div>
+
+
+<div x-data>
+    <button
+        @click="Swal.fire({
+    title:'dark theme',
+    text:'es un ejemplo',
+    icon:'info',
+    confirButtonText:'ok'
+    })">
+        hola
+    </button>
+
+
+    <button @click="Swal.fire({
+        title: '¡Éxito!',
+        text: 'Operación completada',
+        icon: 'success'
+    })">
+        Éxito
+    </button>
+</div>
+
+
+
+<div x-data="{ items: ['Item 1', 'Item 2', 'Item 3'] }">
+    <template x-for="(item, index) in items" :key="index">
+        <div>
+            <span x-text="item"></span>
+            <button @click="
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: 'No podrás revertir esta acción',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        items.splice(index, 1);
+                        Swal.fire('¡Eliminado!', 'El item ha sido eliminado', 'success');
+                    }
+                })
+            ">
+                Eliminar
+            </button>
+        </div>
+    </template>
+</div>
+
+
+
+
+<!-- CONTENEDOR GLOBAL DEL MODAL -->
+<div x-data="{ open: false }">
+
+    <!-- BOTÓN PARA ABRIR EL MODAL -->
+    <button
+        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        @click="open = true"
+    >
+        Nuevo Formulario
+    </button>
+
+    <!-- FONDO OSCURO + MODAL -->
+    <div
+        x-show="open"
+        x-transition
+        x-cloak
+        class="fixed inset-0 flex items-center justify-center
+       bg-gray-50/20
+       z-50 transition-transform"
+        @keydown.escape.window="open = false"
+        @click.self="open = false"
+    >
+    <div
+        x-show="open"
+        x-transition
+        class="bg-white w-full max-w-md p-6 rounded-lg shadow-lg"
+    >
+        <h2 class="text-xl font-semibold mb-4">Nuevo Registro</h2>
+
+        <!-- FORMULARIO -->
+        <form class="space-y-4">
+
+            <!-- Campo 1 -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Nombre</label>
+                <input
+                    type="text"
+                    class="mt-1 w-full border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                >
+            </div>
+
+            <!-- Campo 2 -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Descripción</label>
+                <textarea
+                    class="mt-1 w-full border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                    rows="3"
+                ></textarea>
+            </div>
+
+            <!-- BOTONES -->
+            <div class="flex justify-end space-x-3 mt-4">
+                <button
+                    type="button"
+                    @click="open = false"
+                    class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                >
+                    Cancelar
+                </button>
+
+                <button
+                    type="submit"
+                    class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                >
+                    Guardar
+                </button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+
+</body>
+</html>
+
+
+
+<div x-data="{ message: 'Hola Mundo' }">
+    <span x-text="message"></span>
+</div>

@@ -1,5 +1,4 @@
 @php
-
     $navLinks = [
         [
             'name' => 'Dashboard',
@@ -11,8 +10,27 @@
             'route' => 'configuracion.index',
             'active' => 'configuracion.*',
         ],
-
-
+        [
+            'name' => 'Gestión',
+            'active' => 'gestion.*',
+            'submenu' => [
+                [
+                    'name' => 'Lista de Gestiones',
+                    'route' => 'gestion.index',
+                    'active' => 'gestion.index',
+                ],
+                [
+                    'name' => 'Crear Gestión',
+                    'route' => 'gestion.create',
+                    'active' => 'gestion.create',
+                ],
+               ]
+        ],
+        [
+             'name'   => 'Nivel',
+    'route'  => 'nivel.index',   // ✅ nombre correcto
+    'active' => 'nivel.*',
+        ],
     ];
 @endphp
 
@@ -27,7 +45,7 @@
         {{-- 1) LOGO FIJO ARRIBA --}}
         <div class="h-16 flex items-center justify-center border-b border-gray-200 dark:border-gray-700 px-4 shrink-0">
             <a href="{{ route('dashboard') }}">
-                <x-application-logo class="block h-9 w-auto fill-current text-gray-900 dark:text-gray-100" />
+                <x-application-logo class="block h-9 w-auto fill-current text-gray-900 dark:text-gray-100"/>
             </a>
         </div>
 
@@ -36,11 +54,49 @@
 
             {{-- BUCLE PARA GENERAR ENLACES DE ESCRITORIO --}}
             @foreach($navLinks as $link)
-                <x-nav-link :href="route($link['route'])"
-                            :active="request()->routeIs($link['active'])"
-                            class="flex items-center w-full px-4 py-2 rounded-md">
-                    {{ __($link['name']) }}
-                </x-nav-link>
+                @if(isset($link['submenu']))
+                    {{-- MENÚ CON SUBMENÚ --}}
+                    <div x-data="{ expanded: {{ request()->routeIs($link['active']) ? 'true' : 'false' }} }">
+                        <button @click="expanded = !expanded"
+                                class="flex items-center justify-between w-full px-4 py-2 rounded-md
+                                       text-gray-700 dark:text-gray-300
+                                       hover:bg-gray-100 dark:hover:bg-gray-700
+                                       {{ request()->routeIs($link['active']) ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100' : '' }}">
+                            <span>{{ __($link['name']) }}</span>
+                            <svg class="w-4 h-4 transition-transform duration-200"
+                                 :class="{ 'rotate-180': expanded }"
+                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+
+                        {{-- SUBMENÚ --}}
+                        <div x-show="expanded"
+                             x-transition:enter="transition ease-out duration-200"
+                             x-transition:enter-start="opacity-0 -translate-y-2"
+                             x-transition:enter-end="opacity-100 translate-y-0"
+                             x-transition:leave="transition ease-in duration-150"
+                             x-transition:leave-start="opacity-100 translate-y-0"
+                             x-transition:leave-end="opacity-0 -translate-y-2"
+                             class="mt-2 ml-4 space-y-1">
+                            @foreach($link['submenu'] as $sublink)
+                                <x-nav-link :href="route($sublink['route'])"
+                                            :active="request()->routeIs($sublink['active'])"
+                                            class="flex items-center w-full px-4 py-2 rounded-md text-sm">
+                                    {{ __($sublink['name']) }}
+                                </x-nav-link>
+                            @endforeach
+                        </div>
+                    </div>
+                @else
+                    {{-- MENÚ SIMPLE (sin submenú) --}}
+                    <x-nav-link :href="route($link['route'])"
+                                :active="request()->routeIs($link['active'])"
+                                class="flex items-center w-full px-4 py-2 rounded-md">
+                        {{ __($link['name']) }}
+                    </x-nav-link>
+                @endif
             @endforeach
 
         </div>
@@ -64,7 +120,7 @@
                              xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                             <path fill-rule="evenodd"
                                   d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                  clip-rule="evenodd" />
+                                  clip-rule="evenodd"/>
                         </svg>
                     </button>
                 </x-slot>
@@ -94,7 +150,7 @@
         <div class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700
                     h-16 flex items-center justify-between px-4 fixed top-0 left-0 right-0 z-40">
             <a href="{{ route('dashboard') }}">
-                <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
+                <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200"/>
             </a>
             <button @click="open = !open"
                     class="inline-flex items-center justify-center p-2 rounded-md
@@ -106,11 +162,11 @@
                     <path :class="{'hidden': open, 'inline-flex': !open}"
                           class="inline-flex"
                           stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M4 6h16M4 12h16M4 18h16" />
+                          d="M4 6h16M4 12h16M4 18h16"/>
                     <path :class="{'hidden': !open, 'inline-flex': open}"
                           class="hidden"
                           stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M6 18L18 6M6 6l12 12" />
+                          d="M6 18L18 6M6 6l12 12"/>
                 </svg>
             </button>
         </div>
@@ -144,7 +200,7 @@
             {{-- Logo móvil --}}
             <div class="h-16 flex items-center justify-center border-b border-gray-100 dark:border-gray-700 px-4">
                 <a href="{{ route('dashboard') }}">
-                    <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
+                    <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200"/>
                 </a>
             </div>
 
@@ -153,10 +209,43 @@
 
                 {{-- BUCLE PARA GENERAR ENLACES MÓVILES --}}
                 @foreach($navLinks as $link)
-                    <x-responsive-nav-link :href="route($link['route'])"
-                                           :active="request()->routeIs($link['active'])">
-                        {{ __($link['name']) }}
-                    </x-responsive-nav-link>
+                    @if(isset($link['submenu']))
+                        {{-- MENÚ MÓVIL CON SUBMENÚ --}}
+                        <div x-data="{ expanded: {{ request()->routeIs($link['active']) ? 'true' : 'false' }} }">
+                            <button @click="expanded = !expanded"
+                                    class="flex items-center justify-between w-full px-3 py-2 rounded-md
+                                           text-gray-700 dark:text-gray-300
+                                           hover:bg-gray-100 dark:hover:bg-gray-700
+                                           {{ request()->routeIs($link['active']) ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100' : '' }}">
+                                <span>{{ __($link['name']) }}</span>
+                                <svg class="w-4 h-4 transition-transform duration-200"
+                                     :class="{ 'rotate-180': expanded }"
+                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
+
+                            {{-- SUBMENÚ MÓVIL --}}
+                            <div x-show="expanded"
+                                 x-transition
+                                 class="mt-2 ml-4 space-y-1">
+                                @foreach($link['submenu'] as $sublink)
+                                    <x-responsive-nav-link :href="route($sublink['route'])"
+                                                           :active="request()->routeIs($sublink['active'])"
+                                                           class="text-sm">
+                                        {{ __($sublink['name']) }}
+                                    </x-responsive-nav-link>
+                                @endforeach
+                            </div>
+                        </div>
+                    @else
+                        {{-- MENÚ MÓVIL SIMPLE --}}
+                        <x-responsive-nav-link :href="route($link['route'])"
+                                               :active="request()->routeIs($link['active'])">
+                            {{ __($link['name']) }}
+                        </x-responsive-nav-link>
+                    @endif
                 @endforeach
 
             </div>

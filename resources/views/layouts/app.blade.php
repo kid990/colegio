@@ -9,13 +9,9 @@
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
 
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -23,35 +19,28 @@
 
 <div class="flex h-screen overflow-hidden">
 
-    {{-- Sidebar - Solo visible en lg y arriba --}}
     @include('layouts.navigation')
 
-    {{-- Contenedor principal --}}
     <div class="flex-1 flex flex-col h-full w-full">
 
-        {{-- Header (opcional) --}}
         @isset($header)
-            <header class="bg-white dark:bg-gray-800 shadow z-10
-                           mt-16 lg:mt-0"> {{-- mt-16 compensa la barra móvil --}}
-                <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+            <header class="bg-white dark:bg-gray-800 shadow z-10 mt-16 lg:mt-0">
+                <div class="max-w-7xl mx-auto py-5 px-4 sm:px-6 lg:px-8">
                     {{ $header }}
                 </div>
             </header>
         @endisset
 
-        {{-- Contenido con scroll independiente --}}
-        <main class="flex-1 overflow-y-auto bg-gray-100 dark:bg-gray-900 p-6
-                     pt-2 lg:pt-2"> {{-- pt-20 compensa la barra móvil cuando no hay header --}}
-
+        <main class="flex-1 overflow-y-auto bg-gray-100 dark:bg-gray-900 p-6 pt-4 lg:pt-6">
             @if(session('success'))
                 <div x-data x-init="
-        Swal.fire({
-            icon: 'success',
-            title: 'Éxito',
-            text: '{{ session('success') }}',
-            confirmButtonColor: '#3085d6'
-        })
-    "></div>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Éxito',
+                        text: '{{ session('success') }}',
+                        confirmButtonColor: '#3085d6'
+                    })
+                "></div>
             @endif
 
             {{ $slot }}
