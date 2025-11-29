@@ -4,6 +4,7 @@ use App\Http\Controllers\ConfiguracionController;
 use App\Http\Controllers\GestionController;
 use App\Http\Controllers\NivelController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TurnoController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -25,6 +26,7 @@ Route::prefix('dashboard')->middleware(['auth', 'verified'])->group(function () 
  Route::post('/config', [ConfiguracionController::class, 'store'])->name('config.store');
  Route::resource('/gestion', GestionController::class);
  Route::resource('/nivel', NivelController::class);
+ Route::resource('/turno', TurnoController::class);
 });
 
 require __DIR__.'/auth.php';

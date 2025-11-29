@@ -114,7 +114,8 @@
                     <div class="flex justify-end gap-3 mt-4">
                         <x-secondary-button
                             type="button"
-                            x-on:click="$dispatch('close-modal', 'crear-nivel')"
+                            @click="$dispatch('close')"
+
                         >
                             {{ __('Cancelar') }}
                         </x-secondary-button>
@@ -167,7 +168,8 @@
                         <div class="flex justify-end gap-3 mt-4">
                             <x-secondary-button
                                 type="button"
-                                x-on:click="$dispatch('close-modal', 'editar-nivel-{{ $nivel->id }}')"
+                                @click="$dispatch('close')"
+
                             >
                                 {{ __('Cancelar') }}
                             </x-secondary-button>

@@ -25,7 +25,7 @@ class NivelController extends Controller
     {
         // Validación
         $validated = $request->validate([
-            'nombre' => 'required|string|max:100|unique:nivels,nombre',
+            'nombre' => 'required|string|min:5|max:100|unique:nivels,nombre',
         ]);
 
         // Crear registro
@@ -47,7 +47,7 @@ class NivelController extends Controller
 
         // Validación (ignorando el mismo ID para el unique)
         $validated = $request->validate([
-            'nombre' => 'required|string|max:100|unique:nivels,nombre,' . $nivel->id,
+            'nombre' => 'required|string|min:5|max:100|unique:nivels,nombre,' . $nivel->id,
         ]);
 
         //dd($request->all());

@@ -1,28 +1,31 @@
 <x-app-layout>
 
     {{-- HEADER --}}
+
     <x-header>
-            Niveles
-        </x-header>
+        Turnos
+    </x-header>
 
+    {{--  --}}
 
-    {{-- CONTENIDO PRINCIPAL --}}
     <div class="max-w-7xl mx-auto py-2">
-        <div class="bg-white dark:bg-gray-800 p-8 shadow-sm sm:rounded-lg">
 
+        <div class="bg-white dark:bg-gray-800 p-8 shadow-sm sm:rounded-lg">
             <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                Lista de Niveles
+                Lista de Turnos
             </h2>
 
-            {{-- Botón NUEVO (abre modal crear-nivel) --}}
             <div class="mb-3">
+
                 <x-primary-button
-                    type="button"
-                    x-data
-                    x-on:click="$dispatch('open-modal', 'crear-nivel')"
+                  type="button"
+                x-data
+                x-on:click="$dispatch('open-modal','crear-turno')"
+
                 >
-                    {{ __('Nuevo Nivel') }}
+                    {{ __('Nuevo Turno') }}
                 </x-primary-button>
+
             </div>
 
             {{-- TABLA --}}
@@ -43,14 +46,14 @@
                     </thead>
 
                     <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                    @foreach($niveles as $nivel)
+                    @foreach($turnos as $turno)
                         <tr>
                             <td class="px-4 py-3 text-gray-900 dark:text-gray-100">
-                                {{ $nivel->id }}
+                                {{ $turno->id }}
                             </td>
 
                             <td class="px-4 py-3 text-gray-900 dark:text-gray-100">
-                                {{ $nivel->nombre }}
+                                {{ $turno->nombre }}
                             </td>
 
                             <td class="px-4 py-3">
@@ -59,13 +62,13 @@
                                     <x-secondary-button
                                         type="button"
                                         x-data
-                                        x-on:click="$dispatch('open-modal', 'editar-nivel-{{ $nivel->id }}')"
+                                        x-on:click="$dispatch('open-modal', 'editar-turno-{{ $turno->id }}')"
                                     >
                                         {{ __('Editar') }}
                                     </x-secondary-button>
 
                                     {{-- ELIMINAR --}}
-                                    <x-delete-button :route="route('nivel.destroy', $nivel->id)" />
+                                    <x-delete-button :route="route('turno.destroy', $turno->id)" />
                                 </div>
                             </td>
                         </tr>
@@ -74,24 +77,22 @@
                 </table>
             </div>
 
-            {{-- PAGINACIÓN --}}
-            @if(method_exists($nivel, 'links'))
-                <div class="mt-3">
-                    {{ $nivel->links() }}
-                </div>
-            @endif
+
 
         </div>
+
+
     </div>
 
-    {{-- MODAL CREAR NIVEL --}}
-    <x-modal name="crear-nivel" :show="false" maxWidth="md">
+
+     {{-- MODAL CREAR NIVEL --}}
+    <x-modal name="crear-turno" :show="false" maxWidth="md">
         <div class="p-6">
             <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                {{ __('Crear Nivel') }}
+                {{ __('Crear Turno') }}
             </h2>
 
-            <form method="POST" action="{{ route('nivel.store') }}">
+            <form method="POST" action="{{ route('turno.store') }}">
                 @csrf
 
                 <div class="space-y-4">
@@ -128,26 +129,26 @@
 
 
     {{-- MODALES EDITAR POR CADA NIVEL --}}
-    @foreach($niveles as $nivel)
-        <x-modal name="editar-nivel-{{ $nivel->id }}" :show="false" maxWidth="md">
+    @foreach($turnos as $turno)
+        <x-modal name="editar-turno-{{ $turno->id }}" :show="false" maxWidth="md">
             <div class="p-6">
                 <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                    {{ __('Editar Nivel') }} #{{ $nivel->id }}
+                    {{ __('Editar Turno') }}
                 </h2>
 
-                <form method="POST" action="{{ route('nivel.update', $nivel->id) }}">
+                <form method="POST" action="{{ route('turno.update', $turno->id) }}">
                     @csrf
                     @method('PATCH')
 
                     <div class="space-y-4">
                         <div>
-                            <x-input-label for="nombre_{{ $nivel->id }}" :value="__('Nombre')" />
+                            <x-input-label for="nombre_{{ $turno->id }}" :value="__('Nombre')" />
                             <x-text-input
-                                id="nombre_{{ $nivel->id }}"
+                                id="nombre_{{ $turno->id }}"
                                 name="nombre"
                                 type="text"
                                 class="block w-full mt-1"
-                                :value="$nivel->nombre ?? ''"
+                                :value='$turno->nombre '
                                 autocomplete="off"
                             />
                             <x-input-error class="mt-2" :messages="$errors->get('nombre')" />
@@ -171,5 +172,9 @@
             </div>
         </x-modal>
     @endforeach
+
+
+
+
 
 </x-app-layout>
