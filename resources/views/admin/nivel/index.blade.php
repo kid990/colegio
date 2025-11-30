@@ -74,12 +74,7 @@
                 </table>
             </div>
 
-            {{-- PAGINACIÓN --}}
-            @if(method_exists($nivel, 'links'))
-                <div class="mt-3">
-                    {{ $nivel->links() }}
-                </div>
-            @endif
+   <x-paginacion :data="$niveles" />
 
         </div>
     </div>

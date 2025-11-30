@@ -35,7 +35,12 @@
             'name' => 'Turno',
             'route' => 'turno.index',
             'active' => 'turno.*',
-        ]
+        ],
+        [
+            'name' => 'Periodo',
+            'route' => 'periodo.index',
+            'active' => 'periodo.*',
+        ],
     ];
 @endphp
 

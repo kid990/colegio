@@ -5,6 +5,7 @@ use App\Http\Controllers\GestionController;
 use App\Http\Controllers\NivelController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TurnoController;
+use App\Http\Controllers\PeriodoController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -27,6 +28,7 @@ Route::prefix('dashboard')->middleware(['auth', 'verified'])->group(function () 
  Route::resource('/gestion', GestionController::class);
  Route::resource('/nivel', NivelController::class);
  Route::resource('/turno', TurnoController::class);
+ Route::resource('/periodo', PeriodoController::class);
 });
 
 require __DIR__.'/auth.php';

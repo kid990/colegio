@@ -3,7 +3,7 @@
     {{-- HEADER --}}
 
     <x-header>
-        Turnos
+        Periodos
     </x-header>
 
     {{--  --}}
@@ -12,13 +12,13 @@
 
         <div class="bg-white dark:bg-gray-800 p-8 shadow-sm sm:rounded-lg">
             <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                Lista de Turnos
+                Lista de periodos
             </h2>
 
             <div class="mb-3">
 
-                <x-primary-button type="button" x-data x-on:click="$dispatch('open-modal','crear-turno')">
-                    {{ __('Nuevo Turno') }}
+                <x-primary-button type="button" x-data x-on:click="$dispatch('open-modal','crear-periodo')">
+                    {{ __('Nuevo Periodo') }}
                 </x-primary-button>
 
             </div>
@@ -35,32 +35,39 @@
                                 Nombre
                             </th>
                             <th class="px-4 py-3 text-sm font-semibold text-gray-700 dark:text-gray-300">
+                                Gestion
+                            </th>
+                            <th class="px-4 py-3 text-sm font-semibold text-gray-700 dark:text-gray-300">
                                 Acciones
                             </th>
                         </tr>
                     </thead>
 
                     <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                        @foreach ($turnos as $turno)
+                        @foreach ($periodos as $periodo)
                             <tr>
                                 <td class="px-4 py-3 text-gray-900 dark:text-gray-100">
-                                    {{ $turno->id }}
+                                    {{ $periodo->id }}
                                 </td>
 
                                 <td class="px-4 py-3 text-gray-900 dark:text-gray-100">
-                                    {{ $turno->nombre }}
+                                    {{ $periodo->nombre }}
+                                </td>
+
+                                <td class="px-4 py-3 text-gray-900 dark:text-gray-100">
+                                    {{ $periodo->gestion->nombre }}
                                 </td>
 
                                 <td class="px-4 py-3">
                                     <div class="flex items-center gap-3">
                                         {{-- EDITAR: modal editar-nivel-{{ $nivel->id }} --}}
                                         <x-secondary-button type="button" x-data
-                                            x-on:click="$dispatch('open-modal', 'editar-turno-{{ $turno->id }}')">
+                                            x-on:click="$dispatch('open-modal', 'editar-periodo-{{ $periodo->id }}')">
                                             {{ __('Editar') }}
                                         </x-secondary-button>
 
                                         {{-- ELIMINAR --}}
-                                        <x-delete-button :route="route('turno.destroy', $turno->id)" />
+                                        <x-delete-button :route="route('periodo.destroy', $periodo->id)" />
                                     </div>
                                 </td>
                             </tr>
@@ -69,7 +76,7 @@
                 </table>
             </div>
 
-            <x-paginacion :data="$turnos" />
+            <x-paginacion :data="$periodos" />
 
 
         </div>
@@ -81,13 +88,13 @@
 
 
     {{-- MODAL CREAR NIVEL --}}
-    <x-modal name="crear-turno" :show="false" maxWidth="md">
+    <x-modal name="crear-periodo" :show="false" maxWidth="md">
         <div class="p-6">
             <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                {{ __('Crear Turno') }}
+                {{ __('Crear periodo') }}
             </h2>
 
-            <form method="POST" action="{{ route('turno.store') }}">
+            <form method="POST" action="{{ route('periodo.store') }}">
                 @csrf
 
                 <div class="space-y-4">
@@ -96,6 +103,15 @@
                         <x-text-input id="nombre_nuevo" name="nombre" type="text" class="block w-full mt-1"
                             :value="old('nombre')" autocomplete="off" />
                         <x-input-error class="mt-2" :messages="$errors->get('nombre')" />
+                    </div>
+                    <div>
+                        <x-input-label for="gestion_nuevo" :value="__('Gestion')" />
+                        <select name="gestion_id" id="gestion_nuevo" class="block w-full mt-1">
+                            @foreach ($gestiones as $gestion)
+                                <option value="{{ $gestion->id }}">{{ $gestion->nombre }}</option>
+                            @endforeach
+                            <select/>
+                            <x-input-error class="mt-2" :messages="$errors->get('gestion_id')" />
                     </div>
 
                     <div class="flex justify-end gap-3 mt-4">
@@ -114,22 +130,22 @@
 
 
     {{-- MODALES EDITAR POR CADA NIVEL --}}
-    @foreach ($turnos as $turno)
-        <x-modal name="editar-turno-{{ $turno->id }}" :show="false" maxWidth="md">
+    @foreach ($periodos as $periodo)
+        <x-modal name="editar-periodo-{{ $periodo->id }}" :show="false" maxWidth="md">
             <div class="p-6">
                 <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                    {{ __('Editar Turno') }}
+                    {{ __('Editar periodo') }}
                 </h2>
 
-                <form method="POST" action="{{ route('turno.update', $turno->id) }}">
+                <form method="POST" action="{{ route('periodo.update', $periodo->id) }}">
                     @csrf
                     @method('PATCH')
 
                     <div class="space-y-4">
                         <div>
-                            <x-input-label for="nombre_{{ $turno->id }}" :value="__('Nombre')" />
-                            <x-text-input id="nombre_{{ $turno->id }}" name="nombre" type="text"
-                                class="block w-full mt-1" :value='$turno->nombre' autocomplete="off" />
+                            <x-input-label for="nombre_{{ $periodo->id }}" :value="__('Nombre')" />
+                            <x-text-input id="nombre_{{ $periodo->id }}" name="nombre" type="text"
+                                class="block w-full mt-1" :value='$periodo->nombre' autocomplete="off" />
                             <x-input-error class="mt-2" :messages="$errors->get('nombre')" />
                         </div>
 

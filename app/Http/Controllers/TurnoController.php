@@ -14,7 +14,7 @@ class TurnoController extends Controller
     {
         //
 
-        $turnos = Turno::paginate(10);
+        $turnos = Turno::paginate(4);
         return view("admin.turno.index", compact('turnos'));
     }
 

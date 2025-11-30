@@ -13,7 +13,7 @@ class NivelController extends Controller
     public function index()
     {
         // Usamos paginación para que funcione $niveles->links()
-        $niveles = Nivel::orderBy('id', 'desc')->paginate(10);
+        $niveles = Nivel::orderBy('id', 'desc')->paginate(4);
 
         return view('admin.nivel.index', compact('niveles'));
     }
