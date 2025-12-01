@@ -33,7 +33,7 @@ class TurnoController extends Controller
         Turno::create($datos);
 
         return redirect()
-            ->route('turno.index')
+            ->route('turnos.index')
             ->with('success', 'turno creado correctamente.');
     }
 
@@ -52,7 +52,7 @@ class TurnoController extends Controller
         $turno->update($tdatos);
 
         return redirect()
-            ->route('turno.index')
+            ->route('turnos.index')
             ->with('success', 'Turno actualizado correctamente.');
 
 
@@ -67,7 +67,7 @@ class TurnoController extends Controller
         $turno->delete();
 
         return redirect()
-            ->route('turno.index')
+            ->route('turnos.index')
             ->with('success', 'Turno eliminado correctamente.');
 
 

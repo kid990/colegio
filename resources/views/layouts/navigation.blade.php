@@ -28,18 +28,33 @@
         ],
         [
             'name' => 'Nivel',
-            'route' => 'nivel.index',
-            'active' => 'nivel.*',
+            'route' => 'niveles.index',
+            'active' => 'niveles.*',
         ],
         [
             'name' => 'Turno',
-            'route' => 'turno.index',
-            'active' => 'turno.*',
+            'route' => 'turnos.index',
+            'active' => 'turnos.*',
         ],
         [
             'name' => 'Periodo',
-            'route' => 'periodo.index',
-            'active' => 'periodo.*',
+            'route' => 'periodos.index',
+            'active' => 'periodos.*',
+        ],
+         [
+            'name' => 'Grado',
+            'route' => 'grados.index',
+            'active' => 'grados.*',
+        ],
+        [
+            'name' => 'Paralelo',
+            'route' => 'pararelos.index',
+            'active' => 'pararelos.*',
+        ],
+        [
+            'name' => 'Materias',
+            'route' => 'materias.index',
+            'active' => 'materias.*',
         ],
     ];
 @endphp

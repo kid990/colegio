@@ -6,6 +6,9 @@ use App\Http\Controllers\NivelController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TurnoController;
 use App\Http\Controllers\PeriodoController;
+use App\Http\Controllers\GradoController;
+use App\Http\Controllers\ParareloController;
+use App\Http\Controllers\MateriaController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -26,9 +29,12 @@ Route::prefix('dashboard')->middleware(['auth', 'verified'])->group(function () 
  Route::resource('/configuracion', ConfiguracionController::class);
  Route::post('/config', [ConfiguracionController::class, 'store'])->name('config.store');
  Route::resource('/gestion', GestionController::class);
- Route::resource('/nivel', NivelController::class);
- Route::resource('/turno', TurnoController::class);
- Route::resource('/periodo', PeriodoController::class);
+ Route::resource('/niveles', NivelController::class)->parameters(['niveles' => 'nivel']);
+ Route::resource('/turnos', TurnoController::class);
+ Route::resource('/periodos', PeriodoController::class);
+ Route::resource('/grados', GradoController::class);
+ Route::resource('/pararelos', ParareloController::class);
+ Route::resource('/materias', MateriaController::class);
 });
 
 require __DIR__.'/auth.php';

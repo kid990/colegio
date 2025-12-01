@@ -33,7 +33,7 @@ class NivelController extends Controller
 
         // Redirigir con mensaje
         return redirect()
-            ->route('nivel.index')
+            ->route('niveles.index')
             ->with('success', 'Nivel creado correctamente.');
     }
 
@@ -56,7 +56,7 @@ class NivelController extends Controller
         $nivel->update($validated);
 
         return redirect()
-            ->route('nivel.index')
+            ->route('niveles.index')
             ->with('success', 'Nivel actualizado correctamente.');
     }
 
@@ -68,7 +68,7 @@ class NivelController extends Controller
         $nivel->delete();
 
         return redirect()
-            ->route('nivel.index')
+            ->route('niveles.index')
             ->with('success', 'Nivel eliminado correctamente.');
     }
 }

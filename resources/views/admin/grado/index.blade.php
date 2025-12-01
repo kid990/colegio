@@ -3,7 +3,7 @@
     {{-- HEADER --}}
 
     <x-header>
-        Periodos
+        Grados
     </x-header>
 
     {{--  --}}
@@ -12,13 +12,13 @@
 
         <div class="bg-white dark:bg-gray-800 p-8 shadow-sm sm:rounded-lg">
             <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                Lista de periodos
+                Lista de registro de grados
             </h2>
 
             <div class="mb-3">
 
                 <x-primary-button type="button" x-data x-on:click="$dispatch('open-modal','crear')">
-                    {{ __('Nuevo Periodo') }}
+                    {{ __('Nuevo Grado') }}
                 </x-primary-button>
 
             </div>
@@ -35,7 +35,7 @@
                                 Nombre
                             </th>
                             <th class="px-4 py-3 text-sm font-semibold text-gray-700 dark:text-gray-300">
-                                Gestion
+                                Nivel
                             </th>
                             <th class="px-4 py-3 text-sm font-semibold text-gray-700 dark:text-gray-300">
                                 Acciones
@@ -44,30 +44,30 @@
                     </thead>
 
                     <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                        @foreach ($periodos as $periodo)
+                        @foreach ($grados as $grado)
                             <tr>
                                 <td class="px-4 py-3 text-gray-900 dark:text-gray-100">
-                                    {{ $periodo->id }}
+                                    {{ $grado->id }}
                                 </td>
 
                                 <td class="px-4 py-3 text-gray-900 dark:text-gray-100">
-                                    {{ $periodo->nombre }}
+                                    {{ $grado->nombre }}
                                 </td>
 
                                 <td class="px-4 py-3 text-gray-900 dark:text-gray-100">
-                                    {{ $periodo->gestion->nombre }}
+                                    {{ $grado->nivel->nombre }}
                                 </td>
 
                                 <td class="px-4 py-3">
                                     <div class="flex items-center gap-3">
                                         {{-- EDITAR: modal editar-nivel-{{ $nivel->id }} --}}
                                         <x-secondary-button type="button" x-data
-                                            x-on:click="$dispatch('open-modal', 'editar-{{ $periodo->id }}')">
+                                            x-on:click="$dispatch('open-modal', 'editar-{{ $grado->id }}')">
                                             {{ __('Editar') }}
                                         </x-secondary-button>
 
                                         {{-- ELIMINAR --}}
-                                        <x-delete-button :route="route('periodos.destroy', $periodo->id)" />
+                                        <x-delete-button :route="route('grados.destroy', $grado->id)" />
                                     </div>
                                 </td>
                             </tr>
@@ -76,7 +76,7 @@
                 </table>
             </div>
 
-            <x-paginacion :data="$periodos" />
+            <x-paginacion :data="$grados" />
 
 
         </div>
@@ -91,10 +91,10 @@
     <x-modal name="crear" :show="false" maxWidth="md">
         <div class="p-6">
             <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                {{ __('Crear periodo') }}
+                {{ __('Crear grado') }}
             </h2>
 
-            <form method="POST" action="{{ route('periodos.store') }}">
+            <form method="POST" action="{{ route('grados.store') }}">
                 @csrf
 
                 <div class="space-y-4">
@@ -105,13 +105,13 @@
                         <x-input-error class="mt-2" :messages="$errors->get('nombre')" />
                     </div>
                     <div>
-                        <x-input-label for="gestion_nuevo" :value="__('Gestion')" />
-                        <select name="gestion_id" id="gestion_nuevo" class="block w-full mt-1">
-                            @foreach ($gestiones as $gestion)
-                                <option value="{{ $gestion->id }}">{{ $gestion->nombre }}</option>
+                        <x-input-label for="nivel_nuevo" :value="__('Nivel')" />
+                        <select name="nivel_id" id="nivel_nuevo" class="block w-full mt-1">
+                            @foreach ($niveles as $nivel)
+                                <option value="{{ $nivel->id }}">{{ $nivel->nombre }}</option>
                             @endforeach
-                            <select/>
-                            <x-input-error class="mt-2" :messages="$errors->get('gestion_id')" />
+                        </select>
+                        <x-input-error class="mt-2" :messages="$errors->get('nivel_id')" />
                     </div>
 
                     <div class="flex justify-end gap-3 mt-4">
@@ -130,14 +130,14 @@
 
 
     {{-- MODALES EDITAR POR CADA NIVEL --}}
-    @foreach ($periodos as $periodo)
-        <x-modal name="editar-{{ $periodo->id }}" :show="false" maxWidth="md">
+    @foreach ($grados as $grado)
+        <x-modal name="editar-{{ $grado->id }}" :show="false" maxWidth="md">
             <div class="p-6">
                 <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                    {{ __('Editar periodo') }}
+                    {{ __('Editar grado') }}
                 </h2>
 
-                <form method="POST" action="{{ route('periodos.update', $periodo->id) }}">
+                <form method="POST" action="{{ route('grados.update', $grado->id) }}">
                     @csrf
                     @method('PATCH')
 
@@ -145,24 +145,25 @@
                         <div>
                             <x-input-label for="nombre" :value="__('Nombre')" />
                             <x-text-input id="nombre" name="nombre" type="text"
-                                class="block w-full mt-1" :value='$periodo->nombre' autocomplete="off" />
+                                class="block w-full mt-1" :value='$grado->nombre' autocomplete="off" />
                             <x-input-error class="mt-2" :messages="$errors->get('nombre')" />
                         </div>
 
                         <div>
-                            <x-input-label for="gestion_{{ $periodo->id }}" :value="__('Gestion')" />
-                            <select name="gestion_id" id="gestion_{{ $periodo->id }}" class="block w-full mt-1">
-                                @foreach ($gestiones as $gestion)
+                            <x-input-label for="nivel" :value="__('Nivel')" />
+                            <select name="nivel_id" id="nivel" class="block w-full mt-1">
+                                @foreach ($niveles as $nivel)
                                     <option
-                                     value="{{ $gestion->id }}" 
-                                     {{ $periodo->gestion_id == $gestion->id ? 'selected' : '' }}>
+                                     value="{{ $nivel->id }}" 
+                                     @selected($grado->nivel_id == $nivel->id)
+                                     >
+                                     {{ $nivel->nombre }}
                                      
-                                     {{ $gestion->nombre }}
                                     </option>
                                 @endforeach
 
-                                </select>
-                                <x-input-error class="mt-2" :messages="$errors->get('gestion_id')" />
+                                <select/>
+                                <x-input-error class="mt-2" :messages="$errors->get('nivel_id')" />
                         </div>
 
                         <div class="flex justify-end gap-3 mt-4">

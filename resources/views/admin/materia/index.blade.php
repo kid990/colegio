@@ -2,7 +2,7 @@
 
     {{-- HEADER --}}
     <x-header>
-            Niveles
+            Materias
         </x-header>
 
 
@@ -11,7 +11,7 @@
         <div class="bg-white dark:bg-gray-800 p-8 shadow-sm sm:rounded-lg">
 
             <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                Lista de Niveles
+                Lista de materias
             </h2>
 
             {{-- Botón NUEVO (abre modal crear-nivel) --}}
@@ -21,7 +21,7 @@
                     x-data
                     x-on:click="$dispatch('open-modal', 'crear')"
                 >
-                    {{ __('Nuevo Nivel') }}
+                    {{ __('Nuevo') }}
                 </x-primary-button>
             </div>
 
@@ -43,14 +43,14 @@
                     </thead>
 
                     <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                    @foreach($niveles as $nivel)
+                    @foreach($materias as $materia)
                         <tr>
                             <td class="px-4 py-3 text-gray-900 dark:text-gray-100">
-                                {{ $nivel->id }}
+                                {{ $materia->id }}
                             </td>
 
                             <td class="px-4 py-3 text-gray-900 dark:text-gray-100">
-                                {{ $nivel->nombre }}
+                                {{ $materia->nombre }}
                             </td>
 
                             <td class="px-4 py-3">
@@ -59,13 +59,13 @@
                                     <x-secondary-button
                                         type="button"
                                         x-data
-                                        x-on:click="$dispatch('open-modal', 'editar-{{ $nivel->id }}')"
+                                        x-on:click="$dispatch('open-modal', 'editar-{{ $materia->id }}')"
                                     >
                                         {{ __('Editar') }}
                                     </x-secondary-button>
 
                                     {{-- ELIMINAR --}}
-                                    <x-delete-button :route="route('niveles.destroy', $nivel->id)" />
+                                    <x-delete-button :route="route('materias.destroy', $materia->id)" />
                                 </div>
                             </td>
                         </tr>
@@ -74,7 +74,7 @@
                 </table>
             </div>
 
-   <x-paginacion :data="$niveles" />
+   <x-paginacion :data="$materias" />
 
         </div>
     </div>
@@ -83,10 +83,10 @@
     <x-modal name="crear" :show="false" maxWidth="md">
         <div class="p-6">
             <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                {{ __('Crear Nivel') }}
+                {{ __('Crear Materia') }}
             </h2>
 
-            <form method="POST" action="{{ route('niveles.store') }}">
+            <form method="POST" action="{{ route('materias.store') }}">
                 @csrf
 
                 <div class="space-y-4">
@@ -123,14 +123,14 @@
 
 
     {{-- MODALES EDITAR POR CADA NIVEL --}}
-    @foreach($niveles as $nivel)
-        <x-modal name="editar-{{ $nivel->id }}" :show="false" maxWidth="md">
+    @foreach($materias as $m)
+        <x-modal name="editar-{{ $m->id }}" :show="false" maxWidth="md">
             <div class="p-6">
                 <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                    {{ __('Editar Nivel') }} #{{ $nivel->id }}
+                    {{ __('Editar Materia') }} #{{ $m->id }}
                 </h2>
 
-                <form method="POST" action="{{ route('niveles.update', $nivel->id) }}">
+                <form method="POST" action="{{ route('materias.update', $m->id) }}">
                     @csrf
                     @method('PATCH')
 
@@ -142,7 +142,7 @@
                                 name="nombre"
                                 type="text"
                                 class="block w-full mt-1"
-                                :value="$nivel->nombre"
+                                :value="$m->nombre ?? ''"
                                 autocomplete="off"
                             />
                             <x-input-error class="mt-2" :messages="$errors->get('nombre')" />

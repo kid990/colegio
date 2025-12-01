@@ -17,7 +17,7 @@
 
             <div class="mb-3">
 
-                <x-primary-button type="button" x-data x-on:click="$dispatch('open-modal','crear-turno')">
+                <x-primary-button type="button" x-data x-on:click="$dispatch('open-modal','crear')">
                     {{ __('Nuevo Turno') }}
                 </x-primary-button>
 
@@ -55,12 +55,12 @@
                                     <div class="flex items-center gap-3">
                                         {{-- EDITAR: modal editar-nivel-{{ $nivel->id }} --}}
                                         <x-secondary-button type="button" x-data
-                                            x-on:click="$dispatch('open-modal', 'editar-turno-{{ $turno->id }}')">
+                                            x-on:click="$dispatch('open-modal', 'editar-{{ $turno->id }}')">
                                             {{ __('Editar') }}
                                         </x-secondary-button>
 
                                         {{-- ELIMINAR --}}
-                                        <x-delete-button :route="route('turno.destroy', $turno->id)" />
+                                        <x-delete-button :route="route('turnos.destroy', $turno->id)" />
                                     </div>
                                 </td>
                             </tr>
@@ -81,13 +81,13 @@
 
 
     {{-- MODAL CREAR NIVEL --}}
-    <x-modal name="crear-turno" :show="false" maxWidth="md">
+    <x-modal name="crear" :show="false" maxWidth="md">
         <div class="p-6">
             <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
                 {{ __('Crear Turno') }}
             </h2>
 
-            <form method="POST" action="{{ route('turno.store') }}">
+            <form method="POST" action="{{ route('turnos.store') }}">
                 @csrf
 
                 <div class="space-y-4">
@@ -115,13 +115,13 @@
 
     {{-- MODALES EDITAR POR CADA NIVEL --}}
     @foreach ($turnos as $turno)
-        <x-modal name="editar-turno-{{ $turno->id }}" :show="false" maxWidth="md">
+        <x-modal name="editar-{{ $turno->id }}" :show="false" maxWidth="md">
             <div class="p-6">
                 <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
                     {{ __('Editar Turno') }}
                 </h2>
 
-                <form method="POST" action="{{ route('turno.update', $turno->id) }}">
+                <form method="POST" action="{{ route('turnos.update', $turno->id) }}">
                     @csrf
                     @method('PATCH')
 

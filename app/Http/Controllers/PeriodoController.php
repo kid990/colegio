@@ -32,7 +32,7 @@ class PeriodoController extends Controller
         ]);
 
         Periodo::create($data);
-        return redirect()->route('periodo.index')->with('success', 'Periodo creado con éxito');
+        return redirect()->route('periodos.index')->with('success', 'Periodo creado con éxito');
     }
 
     /**
@@ -46,12 +46,12 @@ class PeriodoController extends Controller
     public function update(Request $request, Periodo $periodo)
     {
         $data = $request->validate([
-            'nombre'=> 'required|unique:periodos,nombre,'. $periodo->nombre,
-            'gestion_id' => 'required|exists:gestions,id,' 
+            'nombre'=> 'required|unique:periodos,nombre,'. $periodo->id,
+            'gestion_id' => 'required|exists:gestions,id' 
         ]);
 
         $periodo->update($data);
-        return redirect()->route('periodo.index')->with('success', 'Periodo actualizado con éxito');        
+        return redirect()->route('periodos.index')->with('success', 'Periodo actualizado con éxito');        
     }
 
     /**
@@ -61,6 +61,6 @@ class PeriodoController extends Controller
     {
         //
         $periodo->delete();
-        return redirect()->route('periodo.index')->with('success', 'Periodo eliminado con éxito');
+        return redirect()->route('periodos.index')->with('success', 'Periodo eliminado con éxito');
     }
 }
