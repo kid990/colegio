@@ -23,30 +23,21 @@ class ConfiguracionController extends Controller
         return view('admin.configuracion.index', compact('configuracion', 'divisas'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
+  
     public function store(Request $request)
     {
-        //
+        // Ver si ya existe una configuración
         $configuracion = Configuracion::first();
 
+        // Reglas base
         $rules = [
-            'nombre' => 'required',
-            'direccion' => 'required',
-            'descripcion' => 'required',
-            'telefono' => 'required',
-            'divisa' => 'required',
-            'correo_electronico' => 'required|email',
-            'web' => '',
+            'nombre' => 'required|string|max:255',
+            'direccion' => 'required|string|max:255',
+            'descripcion' => 'required|string|max:500',
+            'telefono' => 'required|string|max:20',
+            'divisa' => 'required|string|max:10',
+            'correo_electronico' => 'required|email|max:255',
+            'web' => 'nullable|string|max:255',
             'logo' => 'nullable|mimes:jpeg,png,jpg,svg|max:10048',
         ];
 
@@ -54,45 +45,53 @@ class ConfiguracionController extends Controller
         if (!$configuracion) {
             $rules['logo'] = 'required|mimes:jpeg,png,jpg,svg|max:10048';
         }
+
+        // Validación
         $request->validate($rules);
-        // Preparar datos para guardar
 
-        // Método 1: Toma TODO del request
-        // $data = $request->all();
-
-        // Método 2: Toma TODO excepto el logo (luego lo agregamos manualmente)
-        $data = $request->except('logo');
-
-        // Método 3: Toma solo los campos específicos
-        // $data = $request->only(['nombre', 'direccion', 'descripcion', 'telefono', 'divisa', 'correo_electronico', 'web']);
+        // Tomar solo campos de texto
+        $data = $request->only([
+            'nombre',
+            'direccion',
+            'descripcion',
+            'telefono',
+            'divisa',
+            'correo_electronico',
+            'web',
+        ]);
 
         // Manejo del logo
         if ($request->hasFile('logo')) {
+            // Guardar nuevo logo
             $nuevoLogo = $request->file('logo')->store('logo', 'public');
 
-            // DESPUÉS: Borrar logo anterior si existe
+            // Borrar logo anterior si existe
             if ($configuracion && $configuracion->logo) {
                 Storage::disk('public')->delete($configuracion->logo);
             }
-            $data['logo'] = $nuevoLogo;
 
+            $data['logo'] = $nuevoLogo;
         } else {
+            // Si no se sube logo nuevo pero ya había uno, se mantiene
             if ($configuracion) {
                 $data['logo'] = $configuracion->logo;
-
             }
-
         }
-        if($configuracion){
+
+        // Crear o actualizar según exista o no
+        if ($configuracion) {
             $configuracion->update($data);
-            return redirect()->back()->with('success', 'Configuración actualizado exitosamente');
-        }else{
+            $mensaje = 'Configuración actualizada exitosamente';
+        } else {
             Configuracion::create($data);
-            return redirect()->back()->with('success', 'Configuración guardada exitosamente');
-        };
+            $mensaje = 'Configuración guardada exitosamente';
+        }
 
-
+        return redirect()
+            ->back()
+            ->with('success', $mensaje);
     }
+
 
     /**
      * Display the specified resource.

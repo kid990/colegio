@@ -10,6 +10,7 @@ use App\Http\Controllers\GradoController;
 use App\Http\Controllers\ParareloController;
 use App\Http\Controllers\MateriaController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\Auth\VerificarRol;
 
 Route::get('/', function () {
     return view('welcome');
@@ -17,15 +18,15 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified', VerificarRol::class])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth',VerificarRol::class)->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::prefix('dashboard')->middleware(['auth', 'verified'])->group(function () {
+Route::prefix('dashboard')->middleware(['auth', 'verified', VerificarRol::class])->group(function () {
  Route::resource('/configuracion', ConfiguracionController::class);
  Route::post('/config', [ConfiguracionController::class, 'store'])->name('config.store');
  Route::resource('/gestion', GestionController::class);
@@ -35,6 +36,7 @@ Route::prefix('dashboard')->middleware(['auth', 'verified'])->group(function () 
  Route::resource('/grados', GradoController::class);
  Route::resource('/pararelos', ParareloController::class);
  Route::resource('/materias', MateriaController::class);
+
 });
 
 require __DIR__.'/auth.php';

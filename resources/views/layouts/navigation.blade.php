@@ -56,6 +56,7 @@
             'route' => 'materias.index',
             'active' => 'materias.*',
         ],
+         
     ];
 @endphp
 
